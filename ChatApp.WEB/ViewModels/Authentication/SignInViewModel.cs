@@ -16,6 +16,7 @@ namespace ChatApp.WEB.ViewModels.Authentication
 {
     public class SignInViewModel : DotvvmViewModelBase
     {
+        public string ErrorMessage { get; set; }
 
         private readonly UserService userService;
 
@@ -33,12 +34,8 @@ namespace ChatApp.WEB.ViewModels.Authentication
             var identity = await userService.SignInAsync(UserName, Password);
             if (identity == null)
             {
-                Context.ModelState.Errors.Add(new ViewModelValidationError
-                {
-                    ErrorMessage = "Incorrect login",
-                    PropertyPath = nameof(Password)
-                });
-                Context.FailOnInvalidModelState();
+                ErrorMessage = "Incorrect login";
+                return;
             }
 			else
             {

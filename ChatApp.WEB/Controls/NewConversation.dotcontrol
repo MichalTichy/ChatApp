@@ -1,0 +1,26 @@
+@viewModel ChatApp.WEB.ViewModels.DefaultViewModel, ChatApp.WEB 
+
+
+<bs:ModalDialog IsDisplayed="{value: NewConversationModalVisible}" AddCloseButton="true" Size="Large">
+    <HeaderTemplate>New conversation</HeaderTemplate>
+    <ContentTemplate>
+        <bs:Accordion ExpandedItemIndex="{value: 0}">
+            <Items>
+                <bs:AccordionItem HeaderText="People">
+                    <Content>
+                        <bs:CardBody>
+                            PEOPLE
+                        </bs:CardBody>
+                    </Content>
+                </bs:AccordionItem>
+                <bs:AccordionItem HeaderText="Groups">
+                    <Content>
+                        <bs:CardBody>
+                            GROUP
+                        </bs:CardBody>
+                    </Content>
+                </bs:AccordionItem>
+            </Items>
+        </bs:Accordion>
+    </ContentTemplate>
+</bs:ModalDialog>

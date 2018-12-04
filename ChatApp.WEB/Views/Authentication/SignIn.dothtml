@@ -15,6 +15,7 @@
         </HeaderTemplate>
         <Content>
             <bs:CardBody>
+                <bs:Alert Type="Danger" Text="{value: ErrorMessage}" IsDismissible="true" IsDismissed="{value: ErrorMessage==null}" />
                 <bs:Form>
                     <bs:TextBoxFormGroup LabelText="Username" Text="{value: UserName}" />
                     <bs:TextBoxFormGroup LabelText="Password" TextBoxType="Password" Text="{value: Password}" />

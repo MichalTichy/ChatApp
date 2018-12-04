@@ -19,6 +19,7 @@ namespace ChatApp.WEB.ViewModels.Authentication
     {
         private readonly UserService userService;
 
+        public string ErrorMessage { get; set; }
 
         [Required]
         public string UserName { get; set; }
