@@ -1,0 +1,38 @@
+﻿@viewModel ChatApp.WEB.ViewModels.Authentication.RegisterViewModel, ChatApp.WEB
+@masterPage Views/MasterPage.dotmaster
+
+<dot:Content ContentPlaceHolderID="MainContent">
+
+    <div class="page-box">
+        <div Validator.Value="{value: UserName}"
+             Validator.InvalidCssClass="has-error"
+             Validator.SetToolTipText="true"
+             class="page-input-box">
+            Username
+            <dot:TextBox Text="{value: UserName}" class="page-input"/>
+        </div>
+
+        <div Validator.Value="{value: Password}"
+             Validator.InvalidCssClass="has-error"
+             Validator.SetToolTipText="true"
+             class="page-input-box">
+            Password
+            <dot:TextBox Text="{value: Password}" Type="Password" class="page-input"/>
+        </div>
+    
+        <div Validator.Value="{value: ConfirmPassword}"
+             Validator.InvalidCssClass="has-error"
+             Validator.SetToolTipText="true"
+             class="page-input-box">
+            Confirm password
+            <dot:TextBox Text="{value: ConfirmPassword}" Type="Password" class="page-input"/>
+        </div>
+
+        <dot:ValidationSummary Validator.HideWhenValid="true"/>
+		<div class="btn-container">
+			<dot:Button Text="Register" IsSubmitButton="true" Click="{command: Register()}" class="page-button"/>
+		</div>
+    </div>
+    
+</dot:Content>
+

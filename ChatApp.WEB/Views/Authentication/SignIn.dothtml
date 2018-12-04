@@ -1,0 +1,31 @@
+﻿@viewModel ChatApp.WEB.ViewModels.Authentication.SignInViewModel, ChatApp.WEB
+@masterPage Views/MasterPage.dotmaster
+
+
+<dot:Content ContentPlaceHolderID="MainContent">
+
+    <div class="page-box">
+
+        <div Validator.Value="{value: UserName}"
+             Validator.InvalidCssClass="has-error"
+             Validator.SetToolTipText="true"
+             class="page-input-box">
+            Username
+            <dot:TextBox Text="{value: UserName}" class="page-input"/>
+        </div>
+            <div Validator.Value="{value: Password}"
+             Validator.InvalidCssClass="has-error"
+             Validator.SetToolTipText="true"
+             class="page-input-box">
+                Password
+             <dot:TextBox Text="{value: Password}" Type="Password" class="page-input" />
+        </div>
+
+        <div class="btn-container">
+			<dot:Button Text="Sign in" IsSubmitButton="true" Click="{command: SignIn()}" class="page-button"/>
+			
+		    <dot:RouteLink RouteName="Authentication_Register" Text="Register" class="page-button"/>
+		</div>
+    </div>
+</dot:Content>
+

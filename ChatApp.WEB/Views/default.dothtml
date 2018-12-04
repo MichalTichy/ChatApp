@@ -1,0 +1,5 @@
+﻿@viewModel ChatApp.WEB.ViewModels.DefaultViewModel, ChatApp.WEB
+@masterPage Views/MasterPage.dotmaster
+<dot:Content ContentPlaceHolderID="MainContent">
+
+</dot:Content>
