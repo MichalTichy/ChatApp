@@ -33,7 +33,7 @@ namespace ChatApp.WEB
             // register custom resources and adjust paths to the built-in resources
 			config.Resources.Register("Styles", new StylesheetResource()
             {
-                Location = new UrlResourceLocation("~/styles.css")
+                Location = new UrlResourceLocation("~/site.min.css")
             });
         }
 		public void ConfigureServices(IDotvvmServiceCollection options)

@@ -15,7 +15,7 @@ using ChatApp.WEB.Services;
 
 namespace ChatApp.WEB.ViewModels.Authentication
 {
-   public class RegisterViewModel : MasterPageViewModel, IValidatableObject
+   public class RegisterViewModel : DotvvmViewModelBase, IValidatableObject
     {
         private readonly UserService userService;
 

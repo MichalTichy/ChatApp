@@ -1,38 +1,34 @@
 ﻿@viewModel ChatApp.WEB.ViewModels.Authentication.RegisterViewModel, ChatApp.WEB
-@masterPage Views/MasterPage.dotmaster
 
-<dot:Content ContentPlaceHolderID="MainContent">
+<!DOCTYPE html>
 
-    <div class="page-box">
-        <div Validator.Value="{value: UserName}"
-             Validator.InvalidCssClass="has-error"
-             Validator.SetToolTipText="true"
-             class="page-input-box">
-            Username
-            <dot:TextBox Text="{value: UserName}" class="page-input"/>
-        </div>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Registration</title>
+</head>
+<body>
 
-        <div Validator.Value="{value: Password}"
-             Validator.InvalidCssClass="has-error"
-             Validator.SetToolTipText="true"
-             class="page-input-box">
-            Password
-            <dot:TextBox Text="{value: Password}" Type="Password" class="page-input"/>
-        </div>
-    
-        <div Validator.Value="{value: ConfirmPassword}"
-             Validator.InvalidCssClass="has-error"
-             Validator.SetToolTipText="true"
-             class="page-input-box">
-            Confirm password
-            <dot:TextBox Text="{value: ConfirmPassword}" Type="Password" class="page-input"/>
-        </div>
+    <dot:RequiredResource Name="Styles" />
+    <bs:Card class="CenterCard">
+        <HeaderTemplate>
+            <h3>Registration</h3>
+        </HeaderTemplate>
+        <Content>
+            <bs:CardBody>
+                <bs:Form>
+                    <bs:TextBoxFormGroup LabelText="Username" Text="{value: UserName}" />
+                    <bs:TextBoxFormGroup LabelText="Password" TextBoxType="Password" Text="{value: Password}" />
+                    <bs:TextBoxFormGroup LabelText="Confirm Password" TextBoxType="Password" Text="{value: ConfirmPassword}" />
+                    <dot:ValidationSummary />
+                </bs:Form>
+            </bs:CardBody>
+        </Content>
+        <FooterTemplate>
+            <bs:Button Click="{command: Register()}" IsSubmitButton="true" Text="Register"></bs:Button>
+        </FooterTemplate>
+    </bs:Card>
+</body>
+</html>
 
-        <dot:ValidationSummary Validator.HideWhenValid="true"/>
-		<div class="btn-container">
-			<dot:Button Text="Register" IsSubmitButton="true" Click="{command: Register()}" class="page-button"/>
-		</div>
-    </div>
-    
-</dot:Content>
 

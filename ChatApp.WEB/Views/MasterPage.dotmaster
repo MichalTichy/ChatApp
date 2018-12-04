@@ -8,23 +8,17 @@
 	<dot:RequiredResource Name="Styles"/>
 </head>
 <body>
+    <bs:ResponsiveNavigation>
+        <RightAlignedItems>
+            <bs:Form>
+                <bs:FormGroup >
+                    <b>{{value: Username}}</b>
+                    <bs:Button Size="Small" Type="Dark" Text="Sign out" Click="{command: SignOut()}" />
+                </bs:FormGroup>
+            </bs:Form>
+        </RightAlignedItems>
+    </bs:ResponsiveNavigation>
 
- 	<div class="page-top">
-		<span class="page-top-left"> 
-            <dot:RouteLink Text="Home" RouteName="Default" class="page-button-text" />
-        </span>
-		<dot:AuthenticatedView>
-	        <AuthenticatedTemplate>
-		        <dot:LinkButton Text="Sign out" Click="{command: SignOut()}" class="page-button-text" />
-	        </AuthenticatedTemplate>
-			<NotAuthenticatedTemplate>
-	            <dot:RouteLink Text="Sign in" RouteName="Authentication_SignIn" class="page-button-text"/>
-			</NotAuthenticatedTemplate>
-		</dot:AuthenticatedView>
-	</div>
-	
-
-	<dot:ContentPlaceHolder ID="MainContent" />
-
+ 	<dot:ContentPlaceHolder ID="MainContent" />
 </body>
 </html>

@@ -1,31 +1,33 @@
 ﻿@viewModel ChatApp.WEB.ViewModels.Authentication.SignInViewModel, ChatApp.WEB
-@masterPage Views/MasterPage.dotmaster
 
+<!DOCTYPE html>
 
-<dot:Content ContentPlaceHolderID="MainContent">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Sign In</title>
+</head>
+<body>
+    <dot:RequiredResource Name="Styles" />
+    <bs:Card class="CenterCard">
+        <HeaderTemplate>
+            <h3>You have to sign in to continue.</h3>
+        </HeaderTemplate>
+        <Content>
+            <bs:CardBody>
+                <bs:Form>
+                    <bs:TextBoxFormGroup LabelText="Username" Text="{value: UserName}" />
+                    <bs:TextBoxFormGroup LabelText="Password" TextBoxType="Password" Text="{value: Password}" />
+                    <dot:ValidationSummary />
+                </bs:Form>
+            </bs:CardBody>
+        </Content>
+        <FooterTemplate>
+            <bs:Button IsSubmitButton="true" Click="{command: SignIn()}" Text="Sign In"></bs:Button>
+            <dot:RouteLink RouteName="Authentication_Register" Text="Register" />
+        </FooterTemplate>
+    </bs:Card>
+</body>
+</html>
 
-    <div class="page-box">
-
-        <div Validator.Value="{value: UserName}"
-             Validator.InvalidCssClass="has-error"
-             Validator.SetToolTipText="true"
-             class="page-input-box">
-            Username
-            <dot:TextBox Text="{value: UserName}" class="page-input"/>
-        </div>
-            <div Validator.Value="{value: Password}"
-             Validator.InvalidCssClass="has-error"
-             Validator.SetToolTipText="true"
-             class="page-input-box">
-                Password
-             <dot:TextBox Text="{value: Password}" Type="Password" class="page-input" />
-        </div>
-
-        <div class="btn-container">
-			<dot:Button Text="Sign in" IsSubmitButton="true" Click="{command: SignIn()}" class="page-button"/>
-			
-		    <dot:RouteLink RouteName="Authentication_Register" Text="Register" class="page-button"/>
-		</div>
-    </div>
-</dot:Content>
 

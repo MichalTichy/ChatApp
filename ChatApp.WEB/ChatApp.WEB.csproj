@@ -18,6 +18,9 @@
         </Content>
     </ItemGroup>
     <ItemGroup>
+      <Content Remove="compilerconfig.json" />
+    </ItemGroup>
+    <ItemGroup>
         <None Remove="dotvvm_serialized_config.json.tmp" />
         <None Remove="Views\Authentication\Register.dothtml" />
         <None Remove="Views\Authentication\SignIn.dothtml" />
@@ -40,5 +43,8 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Resources\" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="compilerconfig.json" />
     </ItemGroup>
 </Project>

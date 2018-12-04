@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 namespace ChatApp.WEB.DAL
 {
-    public class StudentDbContext : IdentityDbContext
+    public class AppDbContext : IdentityDbContext
     {
-        public StudentDbContext(DbContextOptions options) : base(options)
+        public AppDbContext(DbContextOptions options) : base(options)
         {
             Database.EnsureCreated();
         }

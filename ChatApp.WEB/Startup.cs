@@ -39,12 +39,12 @@ namespace ChatApp.WEB
             services.AddWebEncoders();
             services.AddTransient(typeof(UserService));
             services.AddEntityFrameworkSqlServer()
-                .AddDbContext<StudentDbContext>(options =>
+                .AddDbContext<AppDbContext>(options =>
                 {
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
                 });
             services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<StudentDbContext>()
+                .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 			services.ConfigureApplicationCookie(o => { o.LoginPath = new PathString("/Authentication/SignIn"); });
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
