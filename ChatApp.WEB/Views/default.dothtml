@@ -1,6 +1,6 @@
 ﻿@viewModel ChatApp.WEB.ViewModels.DefaultViewModel, ChatApp.WEB
 @masterPage Views/MasterPage.dotmaster
 <dot:Content ContentPlaceHolderID="MainContent">
-    <bs:Button Type="Success" IsBlockButton="true" Click="{staticCommand: NewConversationModalVisible=true}">+</bs:Button>
+    <bs:Button Type="Success" IsBlockButton="true" Click="{staticCommand: NewConversationModalVisible=true}">New conversation</bs:Button>
 <cc:NewConversation />
 </dot:Content>
