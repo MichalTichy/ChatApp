@@ -1,6 +1,4 @@
-@viewModel ChatApp.WEB.ViewModels.DefaultViewModel, ChatApp.WEB 
-
-
+@viewModel ChatApp.WEB.ViewModels.DefaultViewModel, ChatApp.WEB
 <bs:ModalDialog IsDisplayed="{value: NewConversationModalVisible}" AddCloseButton="true" Size="Large">
     <HeaderTemplate>New conversation</HeaderTemplate>
     <ContentTemplate>
@@ -8,16 +6,25 @@
             <Items>
                 <bs:AccordionItem HeaderText="People">
                     <Content>
-                        <bs:CardBody>
-                            PEOPLE
-                        </bs:CardBody>
+                        <bs:CardListGroup DataSource="{value: AvailableUsers}" ItemType="Button" ColorBinding="{value: Online ? _root.OnlineColor : _root.OfflineColor}" TextBinding="{value: UserName}" ClickBinding="{command: _parent.NewConversation(UserId,false)}" />
                     </Content>
                 </bs:AccordionItem>
                 <bs:AccordionItem HeaderText="Groups">
                     <Content>
-                        <bs:CardBody>
-                            GROUP
+                        <bs:CardBody ColorDecorator.BackgroundColor="Dark">
+                            <bs:InputGroup DataContext="{value: NewGroup}">
+                                <LeftTemplate>
+                                    <bs:InputGroupLiteral Text="New Group" />
+                                </LeftTemplate>
+                                <ContentTemplate>
+                                    <bs:InputGroupTextBox Validator.Value="{value: Name}" Validator.InvalidCssClass="error" placeholder="Group name" Text="{value: Name}"/>
+                                </ContentTemplate>
+                                <RightTemplate>
+                                    <bs:InputGroupButton Type="Success" Validation.Target="{value: _this}" Text="Create" Click="{command: _parent.CreateGroup()}" Validation.Enabled="true" />
+                                </RightTemplate>
+                            </bs:InputGroup>
                         </bs:CardBody>
+                        <bs:CardListGroup DataSource="{value: AvailableGroups}" ItemType="Button" TextBinding="{value: Name}" ClickBinding="{command: _parent.NewConversation(Id,true)}" />
                     </Content>
                 </bs:AccordionItem>
             </Items>

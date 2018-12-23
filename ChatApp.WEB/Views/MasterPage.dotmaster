@@ -7,7 +7,7 @@
     <title>ChatApp.WEB</title>
 	<dot:RequiredResource Name="Styles"/>
 </head>
-<body>
+<body Validation.Enabled="false">
     <bs:ResponsiveNavigation>
         <RightAlignedItems>
             <bs:Form>

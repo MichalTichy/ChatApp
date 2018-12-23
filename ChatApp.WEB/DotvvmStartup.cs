@@ -28,13 +28,23 @@ namespace ChatApp.WEB
             config.AddBootstrap4Configuration();
             config.Markup.AddMarkupControl("cc", "NewConversation", "Controls/NewConversation.dotcontrol");
         }
-
+        
         private void ConfigureResources(DotvvmConfiguration config, string applicationPath)
         {
             // register custom resources and adjust paths to the built-in resources
             config.Resources.Register("Styles", new StylesheetResource()
             {
                 Location = new UrlResourceLocation("~/site.min.css")
+            });
+
+            config.Resources.Register("SignalR", new ScriptResource()
+            {
+                Location = new UrlResourceLocation(@"~/lib/signalR/dist/browser/signalR.min.js")
+            });
+            config.Resources.Register("Chat",new ScriptResource()
+            {
+                Location = new UrlResourceLocation("~/chat.js"),
+                Dependencies = new []{ "SignalR" }
             });
         }
         public void ConfigureServices(IDotvvmServiceCollection options)

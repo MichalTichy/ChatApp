@@ -1,6 +1,37 @@
 ﻿@viewModel ChatApp.WEB.ViewModels.DefaultViewModel, ChatApp.WEB
 @masterPage Views/MasterPage.dotmaster
 <dot:Content ContentPlaceHolderID="MainContent">
+    <dot:RequiredResource Name="Chat" />
     <bs:Button Type="Success" IsBlockButton="true" Click="{staticCommand: NewConversationModalVisible=true}">New conversation</bs:Button>
-<cc:NewConversation />
+    <bs:NavigationBar DataSource="{value: ChatRooms}" IsSelectedBinding="{value: IsActive}" VisualStyle="Tabs" ClickBinding="{command: _root.ActivateChatRoom(_this)}">
+        <ItemsContentTemplate>
+            {{value: Name}} <bs:Badge Type="{value: IsOnline ? OnlineColor : OfflineColor}" Text="O" />
+        </ItemsContentTemplate>
+    </bs:NavigationBar>
+    <div DataContext="{value: ActiveChatRoom}">
+        <bs:DataPager DataSet="{value: Messages}" />
+        <dot:Repeater DataSource="{value:  Messages}">
+            <EmptyDataTemplate>
+                <div ID="noMessages">
+                    <h2>No messages</h2>
+                </div>
+            </EmptyDataTemplate>
+            <ItemTemplate>
+                <bs:Alert>
+                    {{value: SenderName}} - {{value: Date}}: {{value: Data}}
+                </bs:Alert>
+            </ItemTemplate>
+        </dot:Repeater>
+        <div ID="newMessage">
+            <bs:InputGroup>
+                <ContentTemplate>
+                    <bs:InputGroupTextBox Text="{value: NewMessageText}" />
+                </ContentTemplate>
+                <RightTemplate>
+                    <bs:InputGroupButton Text="Send" Click="{command: _root.SendMessage(_this)}" />
+                </RightTemplate>
+            </bs:InputGroup>
+        </div>
+    </div>
+    <cc:NewConversation />
 </dot:Content>

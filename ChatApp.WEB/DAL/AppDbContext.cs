@@ -15,7 +15,7 @@ namespace ChatApp.WEB.DAL
             Database.EnsureCreated();
         }
 
-        protected AppDbContext()
+        protected AppDbContext() : base()
         {
         }
     }

@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using DotVVM.Framework.Hosting;
 using ChatApp.WEB.Services;
 using ChatApp.WEB.DAL;
+using ChatApp.WEB.Hub;
 
 namespace ChatApp.WEB
 {
@@ -52,7 +53,11 @@ namespace ChatApp.WEB
                 {
                     options.LoginPath = "/Authentication/SignIn";
                 });
+            services.AddTransient<GroupService>();
+            services.AddTransient<MessageService>();
+            services.AddTransient<ChatHub>();
             services.AddDotVVM();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,6 +73,11 @@ namespace ChatApp.WEB
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(env.WebRootPath)
+            });
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHub>("/chatHub");
             });
         }
     }

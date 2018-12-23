@@ -8,6 +8,5 @@ namespace ChatApp.WEB.DAL
     public class EntityBase
     {
         public Guid Id { get; set; }
-        public DateTime DeletedDate { get; set; }
     }
 }

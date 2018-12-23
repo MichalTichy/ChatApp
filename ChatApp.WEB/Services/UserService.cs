@@ -7,6 +7,7 @@ using ChatApp.WEB.DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace ChatApp.WEB.Services
@@ -14,10 +15,20 @@ namespace ChatApp.WEB.Services
     public class UserService
     {
         private readonly UserManager<ApplicationUser> userManager;
-		
+        
+
         public UserService(UserManager<ApplicationUser> userManager)
         {
             this.userManager = userManager;
+        }
+
+        public async Task<ApplicationUser> Get(Guid id)
+        {
+            return await userManager.FindByIdAsync(id.ToString());
+        }
+        public async Task<ApplicationUser> Get(string username)
+        {
+            return await userManager.FindByNameAsync(username);
         }
 
         public async Task<ClaimsIdentity> SignInAsync(string userName, string password)
@@ -52,5 +63,9 @@ namespace ChatApp.WEB.Services
             return identity;
         }
 
+        public List<ApplicationUser> GetAll()
+        {
+            return userManager.Users.ToList();
+        }
     }
 }

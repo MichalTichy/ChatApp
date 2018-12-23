@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
     <PropertyGroup>
-        <TargetFramework>netcoreapp2.0</TargetFramework>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
     </PropertyGroup>
     <ItemGroup>
         <!--Include Views-->
@@ -29,15 +30,16 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="DotVVM.Controls.Bootstrap4" Version="2.0.3-preview04" />
-        <PackageReference Include="Microsoft.AspNetCore" Version="2.0.3" />
-        <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.3" />
+        <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
         <PackageReference Include="DotVVM.AspNetCore" Version="2.0.3" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.0.0" />
-<PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.0" />
-<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.0" />
-<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.0.0" />
-<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.0.0" />
-<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.0">
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
+<PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.0" />
+<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0" />
+<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
+<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.0">
   <PrivateAssets>all</PrivateAssets>
   <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 </PackageReference>
@@ -48,6 +50,7 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Resources\" />
+      <Folder Include="wwwroot\lib\signalR\" />
     </ItemGroup>
     <ItemGroup>
       <None Include="compilerconfig.json" />

@@ -10,3 +10,12 @@
 .CenterCard > div.card-footer {
   text-align: right;
 }
+.error {
+  background-color: #f5c6cb;
+}
+#newMessage {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 10px;
+}
