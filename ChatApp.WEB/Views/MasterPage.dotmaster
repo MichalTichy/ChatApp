@@ -8,7 +8,7 @@
 	<dot:RequiredResource Name="Styles"/>
 </head>
 <body Validation.Enabled="false">
-    <bs:ResponsiveNavigation>
+    <bs:ResponsiveNavigation ColorDecorator.BackgroundColor="Transparent">
         <RightAlignedItems>
             <bs:Form>
                 <bs:FormGroup >

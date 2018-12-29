@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,34 +44,67 @@ namespace ChatApp.WEB.ViewModels
 
         public List<ChatRoom> ChatRooms { get; set; } = new List<ChatRoom>();
         public ChatRoom ActiveChatRoom { get; set; }
-        public override Task Load()
-        {
-            if (!ChatRooms.Any())
-            {
-                NewConversationModalVisible = true;
-            }
-
-            return base.Load();
-        }
-
+        public GroupManagementModel GroupManagementModel { get; set; }
         public override Task PreRender()
         {
-            if (ActiveChatRoom!=null)
+
+            if (ActiveChatRoom != null)
             {
                 ActiveChatRoom.LoadMessages(messageService, UserId);
                 ActiveChatRoom.Messages.Items = ActiveChatRoom.Messages.Items.Reverse().ToList();
+            }
+            else
+            {
+                ActiveChatRoom = ChatRooms.LastOrDefault();
+                if (ActiveChatRoom != null)
+                {
+                    ActivateChatRoom(ActiveChatRoom);
+                }
+            }
+
+            if (!ChatRooms.Any())
+            {
+                NewConversationModalVisible = true;
             }
             return base.PreRender();
         }
 
         public void LoadMessages(ChatRoom chatRoom)
         {
-            chatRoom.LoadMessages(messageService,UserId);
+            chatRoom.LoadMessages(messageService, UserId);
         }
 
-        public void NewConversation(Guid recipientId, bool isGroup)
+        public async Task LoadGroupManagementModalData(Guid groupId)
         {
-            var chatRoom = ChatRooms.FirstOrDefault(t => t.Id == recipientId);
+            GroupManagementModel = new GroupManagementModel()
+            {
+                GroupId = groupId,
+                AvailableUsers = groupService.GetUsersNotInGroup(groupId),
+                NormalUsers = await groupService.GetNormalUsersInGroup(groupId),
+                Managers = await groupService.GetManagersInGroup(groupId),
+                SelectedUserId = AvailableUsers.FirstOrDefault()?.UserId
+            };
+        }
+
+        public async Task AddUserToGroup()
+        {
+            await groupService.AddMemberToGroup(GroupManagementModel.GroupId, GroupManagementModel.SelectedUserId.Value);
+            await LoadGroupManagementModalData(GroupManagementModel.GroupId);
+        }
+        public async Task RemoveUserFromGroup(Guid userId)
+        {
+            await groupService.RemoveUserFromGroup(GroupManagementModel.GroupId, userId);
+            await LoadGroupManagementModalData(GroupManagementModel.GroupId);
+        }
+        public async Task PromoteUser(Guid userId)
+        {
+            await groupService.PromoteUser(GroupManagementModel.GroupId, userId);
+            await LoadGroupManagementModalData(GroupManagementModel.GroupId);
+        }
+
+        public void NewConversation(Guid id, bool isGroup)
+        {
+            var chatRoom = ChatRooms.FirstOrDefault(t => t.Id == id);
             if (chatRoom != null)
             {
                 ActivateChatRoom(chatRoom);
@@ -80,12 +114,13 @@ namespace ChatApp.WEB.ViewModels
 
             if (isGroup)
             {
-                var group = groupService.Get(recipientId).Result;
-                chatRoom = ChatRoom.From(group);
+                var group = groupService.Get(id).Result;
+                var isManager = groupService.IsManager(id, UserId);
+                chatRoom = ChatRoom.From(group, isManager);
             }
             else
             {
-                var user = userService.Get(recipientId).Result;
+                var user = userService.Get(id).Result;
                 chatRoom = ChatRoom.From(user);
             }
 
@@ -108,7 +143,7 @@ namespace ChatApp.WEB.ViewModels
         protected ICollection<UserInfo> GetAvailableUsers()
         {
             var applicationUsers = userService.GetAll();
-            return applicationUsers.Where(t => t.UserName != Username).Select(t => new UserInfo() { UserName = t.UserName, UserId = t.Id,Online = ChatHub.IsUserConnected(t.UserName)}).OrderBy(t => t.Online).ToList(); //TODO STATUS
+            return applicationUsers.Where(t => t.UserName != Username).Select(t => new UserInfo() { UserName = t.UserName, UserId = t.Id, Online = ChatHub.IsUserConnected(t.UserName) }).OrderBy(t => t.Online).ToList(); //TODO STATUS
         }
 
         protected ICollection<Group> GetAvailableGroups()
@@ -121,6 +156,7 @@ namespace ChatApp.WEB.ViewModels
             var group = await groupService.CreateGroup(NewGroup.Name);
             await groupService.AddMemberToGroup(@group.Id, UserId, true);
             NewGroup = new NewGroupModel();
+            NewConversation(group.Id, true);
         }
 
         public async Task SendMessage(ChatRoom chatRoom)
@@ -128,7 +164,30 @@ namespace ChatApp.WEB.ViewModels
             await chatRoom.SendMessage(messageService, UserId, Username);
         }
 
+        public async Task LeaveGroup(ChatRoom chatRoom)
+        {
+            CloseChatRoom(chatRoom);
+            await groupService.RemoveUserFromGroup(chatRoom.Id, UserId);
+        }
+
+        public void CloseChatRoom(ChatRoom chatRoom)
+        {
+
+            ChatRooms.Remove(chatRoom);
+            ActiveChatRoom = null;
+        }
         public NewGroupModel NewGroup { get; set; } = new NewGroupModel();
+        public bool NotificationDismissed { get; set; } = true;
+        public string NotificationText { get; set; }
+    }
+
+    public class GroupManagementModel
+    {
+        public ICollection<ApplicationUser> AvailableUsers { get; set; }
+        public ICollection<ApplicationUser> NormalUsers { get; set; }
+        public ICollection<ApplicationUser> Managers { get; set; }
+        public Guid? SelectedUserId { get; set; }
+        public Guid GroupId { get; set; }
     }
 
     public class NewGroupModel
@@ -145,28 +204,42 @@ namespace ChatApp.WEB.ViewModels
     public class ChatRoom
     {
         public bool IsGroup { get; set; }
+        public bool IsManager { get; set; }
         public string Name { get; set; }
         public Guid Id { get; set; }
         public GridViewDataSet<Message> Messages { get; set; } = new GridViewDataSet<Message>();
         public bool IsActive { get; set; }
         public bool IsOnline { get; set; }
         public BootstrapColor OnlineColor => BootstrapColor.Success;
-        public BootstrapColor OfflineColor => BootstrapColor.Danger;
+        public BootstrapColor OfflineColor => BootstrapColor.Warning;
         public string NewMessageText { get; set; }
-        public void LoadMessages(MessageService messageService,Guid userId)
+
+        public void LoadMessages(MessageService messageService, Guid userId)
         {
-            Messages.PagingOptions.PageSize = 10;
-            Messages.LoadFromQueryable(messageService.GetMessages(Id,userId).OrderByDescending(t=>t.Date));
+            Messages.PagingOptions.PageSize = 5;
+            if (IsGroup)
+            {
+                Messages.LoadFromQueryable(messageService.GetMessages(Id).OrderByDescending(t => t.Date));
+            }
+            else
+            {
+                Messages.LoadFromQueryable(messageService.GetMessages(Id, userId).OrderByDescending(t => t.Date));
+            }
         }
 
-        public static ChatRoom From(Group group)
+        public AlertType CurrentUserColor => AlertType.Success;
+
+        public AlertType OtherUsersColor => AlertType.Primary;
+
+        public static ChatRoom From(Group group, bool isManager)
         {
             return new ChatRoom()
             {
                 Id = group.Id,
                 Name = group.Name,
                 IsGroup = true,
-                IsOnline = true
+                IsOnline = true,
+                IsManager = isManager
             };
         }
 
@@ -180,10 +253,32 @@ namespace ChatApp.WEB.ViewModels
             };
         }
 
-        public async Task SendMessage(MessageService messageService,Guid senderId,string senderName)
+        public async Task SendMessage(MessageService messageService, Guid senderId, string senderName)
         {
-            await messageService.Send(NewMessageText, Id,IsGroup,senderId,senderName);
-            NewMessageText=String.Empty;
+            Messages.GoToFirstPage();
+            await messageService.Send(NewMessageText, Id, IsGroup, senderId, senderName);
+            NewMessageText = String.Empty;
+        }
+
+        protected bool Equals(ChatRoom other)
+        {
+            return IsGroup == other.IsGroup && Id.Equals(other.Id);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((ChatRoom)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (IsGroup.GetHashCode() * 397) ^ Id.GetHashCode();
+            }
         }
     }
 }

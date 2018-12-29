@@ -1,0 +1,39 @@
+@viewModel ChatApp.WEB.ViewModels.DefaultViewModel, ChatApp.WEB 
+
+
+
+    <bs:ModalDialog HeaderText="Group management" AddCloseButton="true" DataContext="{value: GroupManagementModel}" IsDisplayed="{value: _root.GroupManagementModel!=null }">
+        <ContentTemplate>
+            <bs:InputGroup Visible="{value: AvailableUsers.Count!=0}">
+                <LeftTemplate>
+                    <bs:InputGroupLiteral Text="Add user to group" />
+                </LeftTemplate>
+                <ContentTemplate>
+                    <bs:InputGroupComboBox DataSource="{value: AvailableUsers}" SelectedValue="{value: SelectedUserId}" ItemValueBinding="{value: Id}" ItemTextBinding="{value: UserName}" />
+                </ContentTemplate>
+                <RightTemplate>
+                    <bs:InputGroupButton Type="Success" Click="{command: _root.AddUserToGroup()}" Text="Add" />
+                </RightTemplate>
+            </bs:InputGroup>
+            <br />
+            <div Visible="{value: Managers.Count!=0}">
+                <bs:GridView DataSource="{value: Managers}" HasStripedRows="true" Border="All">
+                    <Columns>
+                        <dot:GridViewTextColumn HeaderText="Managers" ValueBinding="{value: UserName}" />
+                    </Columns>
+                </bs:GridView>
+            </div>
+            <div Visible="{value: NormalUsers.Count!=0}">
+                <b>Users</b>
+                <bs:GridView DataSource="{value: NormalUsers}" HasStripedRows="true" Border="All">
+                    <dot:GridViewTextColumn HeaderText="Users" ValueBinding="{value: UserName}" />
+                    <dot:GridViewTemplateColumn Width="10%">
+                        <bs:ButtonGroup Size="Small">
+                            <bs:Button Type="Danger" Text="Kick" Click="{command: _root.RemoveUserFromGroup(Id)}" />
+                            <bs:Button Type="Success" Text="Promote" Click="{command: _root.PromoteUser(Id)}" />
+                        </bs:ButtonGroup>
+                    </dot:GridViewTemplateColumn>
+                </bs:GridView>
+            </div>
+        </ContentTemplate>
+    </bs:ModalDialog>

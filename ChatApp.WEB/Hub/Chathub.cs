@@ -11,6 +11,12 @@ namespace ChatApp.WEB.Hub
     
     public class ChatHub : Microsoft.AspNetCore.SignalR.Hub
     {
+        private readonly GroupService _groupService;
+
+        public ChatHub(GroupService groupService)
+        {
+            _groupService = groupService;
+        }
         public static Dictionary<string,string> ConnectedUsers = new Dictionary<string, string>();
         
         public static bool IsUserConnected(string userName)
@@ -30,6 +36,11 @@ namespace ChatApp.WEB.Hub
                 ConnectedUsers[username] = Context.ConnectionId;
             }
 
+            foreach (var group in _groupService.GetUsersGroups(Context.User.Identity.Name))
+            {
+                Groups.AddToGroupAsync(Context.ConnectionId, group.Id.ToString());
+            }
+
             Clients.Others.SendAsync("ClientConnected", username);
             return base.OnConnectedAsync();
         }
@@ -42,7 +53,11 @@ namespace ChatApp.WEB.Hub
             {
                 ConnectedUsers.Remove(username);
             }
-
+            
+            foreach (var group in _groupService.GetUsersGroups(Context.User.Identity.Name))
+            {
+                Groups.RemoveFromGroupAsync(Context.ConnectionId, group.Id.ToString());
+            }
 
             Clients.Others.SendAsync("ClientDisconnected", username);
             return base.OnDisconnectedAsync(exception);

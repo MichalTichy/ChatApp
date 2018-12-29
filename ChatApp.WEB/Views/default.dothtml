@@ -2,30 +2,53 @@
 @masterPage Views/MasterPage.dotmaster
 <dot:Content ContentPlaceHolderID="MainContent">
     <dot:RequiredResource Name="Chat" />
-    <bs:Button Type="Success" IsBlockButton="true" Click="{staticCommand: NewConversationModalVisible=true}">New conversation</bs:Button>
+    <div ID="notification">
+        <bs:Alert IsDismissed="{value: NotificationDismissed}" IsDismissible="true" Type="Info" Text="{value: NotificationText}" />
+    </div>
+    <bs:Button VisualStyle="Outline" Size="Large" Type="Success" id="newConversation" Click="{staticCommand: NewConversationModalVisible=true}">New conversation</bs:Button>
     <bs:NavigationBar DataSource="{value: ChatRooms}" IsSelectedBinding="{value: IsActive}" VisualStyle="Tabs" ClickBinding="{command: _root.ActivateChatRoom(_this)}">
         <ItemsContentTemplate>
-            {{value: Name}} <bs:Badge Type="{value: IsOnline ? OnlineColor : OfflineColor}" Text="O" />
+            {{value: Name}} <bs:Badge Type="{value: IsOnline ? OnlineColor : OfflineColor}" Text="{value: IsOnline ? 'ONLINE' : 'AWAY'}" /> <bs:Button Type="Link" Size="Small" Text="X" Click="{command:  _root.CloseChatRoom(_this)}" />
         </ItemsContentTemplate>
     </bs:NavigationBar>
-    <div DataContext="{value: ActiveChatRoom}">
-        <bs:DataPager DataSet="{value: Messages}" />
-        <dot:Repeater DataSource="{value:  Messages}">
+    <div DataContext="{value: ActiveChatRoom}" class="content">
+        <div class="controls">
+            <div>
+                <bs:DataPager DataSet="{value: Messages}" />
+            </div>
+            <div class="GroupControls" Visible="{value: IsGroup}">
+                <bs:ButtonGroup>
+                    <bs:Button Text="Group management"  Visible="{value: IsManager}" Click="{command: _root.LoadGroupManagementModalData(_this.Id)}" Type="Info" />
+                    <bs:Button Text="Leave group" Click="{command: _root.LeaveGroup(_this)}" Type="Danger" />
+                </bs:ButtonGroup>
+            </div>
+        </div>
+        <dot:Repeater DataSource="{value:  Messages}" class="messages">
             <EmptyDataTemplate>
                 <div ID="noMessages">
                     <h2>No messages</h2>
                 </div>
             </EmptyDataTemplate>
             <ItemTemplate>
-                <bs:Alert>
-                    {{value: SenderName}} - {{value: Date}}: {{value: Data}}
-                </bs:Alert>
+                <div class="message" Class-sendMessage="{value: SenderName==_root.Username }" Class-receivedMessage="{value: SenderName!=_root.Username }">
+                    <bs:Alert Type="{value:  SenderName==_root.Username ? _parent.CurrentUserColor : _parent.OtherUsersColor}">
+                        <div class="sender">
+                            <dot:Literal Text="{value: SenderName}" />
+                        </div>
+                        <div class="date">
+                            <dot:Literal ValueType="DateTime" Text="{value: Date}" FormatString="g" />
+                        </div>
+                        <div class="text">
+                            <dot:Literal Text="{value: Data}" />
+                        </div>
+                    </bs:Alert>
+                </div>
             </ItemTemplate>
         </dot:Repeater>
         <div ID="newMessage">
             <bs:InputGroup>
                 <ContentTemplate>
-                    <bs:InputGroupTextBox Text="{value: NewMessageText}" />
+                    <bs:InputGroupTextBox Type="MultiLine" Text="{value: NewMessageText}" />
                 </ContentTemplate>
                 <RightTemplate>
                     <bs:InputGroupButton Text="Send" Click="{command: _root.SendMessage(_this)}" />
@@ -34,4 +57,5 @@
         </div>
     </div>
     <cc:NewConversation />
+    <cc:GroupManagement />
 </dot:Content>

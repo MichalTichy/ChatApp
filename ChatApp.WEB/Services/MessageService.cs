@@ -29,6 +29,12 @@ namespace ChatApp.WEB.Services
             var enumerable = messages.Where(t => t.Recipient == recipient && t.Sender==sender || t.Recipient==sender && t.Sender==recipient);
             return enumerable.OrderBy(t=>t.Date);
         }
+        public IQueryable<Message> GetMessages(Guid groupId)
+        {
+            var messages = context.Set<Message>();
+            var enumerable = messages.Where(t => t.Recipient == groupId);
+            return enumerable.OrderBy(t=>t.Date);
+        }
 
         public async Task Send(string text, Guid recipient,bool isGroup, Guid senderId,string senderName)
         {
@@ -45,8 +51,8 @@ namespace ChatApp.WEB.Services
             
             if (message.IsGroupMessage)
             {
-                await hubContext.Clients.Group(recipient.ToString()).SendAsync("ReceiveMessage", message.Recipient, message.Data, dateWithoutTimezone.ToString("O"), message.Sender, message.SenderName, message.IsGroupMessage);
-
+                var groupName = (await groupService.Get(recipient)).Name;
+                await hubContext.Clients.GroupExcept(recipient.ToString(),ChatHub.ConnectedUsers[senderName]).SendAsync("ReceiveMessage", message.Recipient, message.Data, dateWithoutTimezone.ToString("O"), message.Sender, message.SenderName,groupName, message.IsGroupMessage, message.Id);
             }
             else
             {
@@ -54,7 +60,8 @@ namespace ChatApp.WEB.Services
                 if (ChatHub.IsUserConnected(user.UserName))
                 {
                     var connectedUser = ChatHub.ConnectedUsers[user.UserName];
-                    await hubContext.Clients.Client(connectedUser).SendAsync("ReceiveMessage", message.Sender, message.Data, dateWithoutTimezone.ToString("O"), message.Sender, message.SenderName, message.IsGroupMessage);
+                    var recipientName = (await userService.Get(recipient)).UserName;
+                    await hubContext.Clients.Client(connectedUser).SendAsync("ReceiveMessage", message.Sender, message.Data, dateWithoutTimezone.ToString("O"), message.Sender, message.SenderName,recipientName, message.IsGroupMessage,message.Id);
                 }
             }
         }

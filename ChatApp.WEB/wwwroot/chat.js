@@ -30,7 +30,7 @@ connection.on("ClientDisconnected", function (username) {
     });
 });
 
-connection.on("ReceiveMessage", function (chatRoomId, data, date, sender, senderName, isGroupMessage) {
+connection.on("ReceiveMessage", function (chatRoomId, data, date, sender, senderName, recipientName, isGroupMessage,messageId) {
     var activeChatRoom = dotvvm.viewModels.root.viewModel.ActiveChatRoom();
     if (activeChatRoom.Id() === chatRoomId) {
         var message = {};
@@ -39,9 +39,18 @@ connection.on("ReceiveMessage", function (chatRoomId, data, date, sender, sender
         message.Sender = ko.observable(sender);
         message.SenderName = ko.observable(senderName);
         message.Recipient = ko.observable(chatRoomId);
+        message.RecipientName = ko.observable(recipientName);
         message.IsGroupMessage = ko.observable(isGroupMessage);
-        message.Id = ko.observable("000000");
+        message.Id = ko.observable(messageId);
         activeChatRoom.Messages().Items.push(ko.observable(message));
+    } else {
+        dotvvm.viewModels.root.viewModel.NotificationDismissed(false);
+        if (isGroupMessage) {
+            dotvvm.viewModels.root.viewModel.NotificationText("You have new message from " + senderName + " in group " + recipientName + ".");
+        } else {
+            dotvvm.viewModels.root.viewModel.NotificationText("You have new message from " + senderName + ".");
+        }
+
     }
 });
 connection.start();

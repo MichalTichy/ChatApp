@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
@@ -52,6 +53,7 @@ namespace ChatApp.WEB
                 .AddCookie(options =>
                 {
                     options.LoginPath = "/Authentication/SignIn";
+                    options.ExpireTimeSpan=TimeSpan.FromDays(1);
                 });
             services.AddTransient<GroupService>();
             services.AddTransient<MessageService>();

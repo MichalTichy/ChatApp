@@ -22,6 +22,7 @@
       <Content Remove="compilerconfig.json" />
     </ItemGroup>
     <ItemGroup>
+        <None Remove="Controls\GroupManagement.dotcontrol" />
         <None Remove="Controls\NewConversation.dotcontrol" />
         <None Remove="dotvvm_serialized_config.json.tmp" />
         <None Remove="Views\Authentication\Register.dothtml" />

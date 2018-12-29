@@ -27,8 +27,9 @@ namespace ChatApp.WEB
             // register code-only controls and markup controls
             config.AddBootstrap4Configuration();
             config.Markup.AddMarkupControl("cc", "NewConversation", "Controls/NewConversation.dotcontrol");
+            config.Markup.AddMarkupControl("cc", "GroupManagement", "Controls/GroupManagement.dotcontrol");
         }
-        
+
         private void ConfigureResources(DotvvmConfiguration config, string applicationPath)
         {
             // register custom resources and adjust paths to the built-in resources
@@ -41,10 +42,10 @@ namespace ChatApp.WEB
             {
                 Location = new UrlResourceLocation(@"~/lib/signalR/dist/browser/signalR.min.js")
             });
-            config.Resources.Register("Chat",new ScriptResource()
+            config.Resources.Register("Chat", new ScriptResource()
             {
                 Location = new UrlResourceLocation("~/chat.js"),
-                Dependencies = new []{ "SignalR" }
+                Dependencies = new[] { "SignalR" }
             });
         }
         public void ConfigureServices(IDotvvmServiceCollection options)
