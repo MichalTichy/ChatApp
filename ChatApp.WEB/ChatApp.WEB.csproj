@@ -3,6 +3,9 @@
         <TargetFramework>netcoreapp2.2</TargetFramework>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
+        <UserSecretsId>6ac94bd3-7f1c-403b-9a4f-1bc77929f41b</UserSecretsId>
+        <ApplicationInsightsResourceId>/subscriptions/7752c330-509d-43c2-aeae-d35e1c4bce62/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/ChatApp.WEB</ApplicationInsightsResourceId>
+        <ApplicationInsightsAnnotationResourceId>/subscriptions/7752c330-509d-43c2-aeae-d35e1c4bce62/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/ChatApp.WEB</ApplicationInsightsAnnotationResourceId>
     </PropertyGroup>
     <ItemGroup>
         <!--Include Views-->
@@ -31,6 +34,7 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="DotVVM.Controls.Bootstrap4" Version="2.0.3-preview04" />
+        <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
         <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
@@ -55,5 +59,8 @@
     </ItemGroup>
     <ItemGroup>
       <None Include="compilerconfig.json" />
+    </ItemGroup>
+    <ItemGroup>
+      <WCFMetadata Include="Connected Services" />
     </ItemGroup>
 </Project>

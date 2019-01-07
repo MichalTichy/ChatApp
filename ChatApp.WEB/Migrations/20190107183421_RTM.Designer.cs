@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChatApp.WEB.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20181223105850_added sender name to the message")]
-    partial class addedsendernametothemessage
+    [Migration("20190107183421_RTM")]
+    partial class RTM
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

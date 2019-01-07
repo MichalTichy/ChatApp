@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChatApp.WEB.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20181222195255_Init")]
+    [Migration("20190107183348_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,54 +70,6 @@ namespace ChatApp.WEB.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("ChatApp.WEB.DAL.Group", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Groups");
-                });
-
-            modelBuilder.Entity("ChatApp.WEB.DAL.GroupMembership", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("GroupId");
-
-                    b.Property<bool>("IsManager");
-
-                    b.Property<Guid>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Memberships");
-                });
-
-            modelBuilder.Entity("ChatApp.WEB.DAL.Message", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Data");
-
-                    b.Property<DateTime>("Date");
-
-                    b.Property<bool>("IsGroupMessage");
-
-                    b.Property<Guid>("Recipient");
-
-                    b.Property<Guid>("Sender");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("ChatApp.WEB.DAL.Role", b =>

@@ -5,7 +5,7 @@
     <div ID="notification">
         <bs:Alert IsDismissed="{value: NotificationDismissed}" IsDismissible="true" Type="Info" Text="{value: NotificationText}" />
     </div>
-    <bs:Button VisualStyle="Outline" Size="Large" Type="Success" id="newConversation" Click="{staticCommand: NewConversationModalVisible=true}">New conversation</bs:Button>
+    <bs:Button VisualStyle="Outline" Type="Success" id="newConversation" Click="{staticCommand: NewConversationModalVisible=true}">New conversation</bs:Button>
     <bs:NavigationBar DataSource="{value: ChatRooms}" IsSelectedBinding="{value: IsActive}" VisualStyle="Tabs" ClickBinding="{command: _root.ActivateChatRoom(_this)}">
         <ItemsContentTemplate>
             {{value: Name}} <bs:Badge Type="{value: IsOnline ? OnlineColor : OfflineColor}" Text="{value: IsOnline ? 'ONLINE' : 'AWAY'}" /> <bs:Button Type="Link" Size="Small" Text="X" Click="{command:  _root.CloseChatRoom(_this)}" />
